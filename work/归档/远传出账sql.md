@@ -50,32 +50,69 @@ on wms.mr_cid = wc.client_code where wc.client_type = '2' and wms.mr_inputer = '
 ```
 ### 查表计划差异
 ```
-SELECT 
+SELECT
+    CASE
+        wmr.client_type
+        WHEN '1' THEN '户表'
+        WHEN '2' THEN '大路表'
+        WHEN '3' THEN '楼门表'
+    END AS "用户类型",
     wmr.abode_code AS "营业所编号",
     wmr.meter_code AS "新系统水表编号",
-    wms.mr_mid AS "旧系统水表编号",
+    WMS."MR_MID" AS "旧系统水表编号",
     wmr.mr_old_last AS "新系统起码",
-    wms.mr_scode AS "旧系统起码",
+    WMS."MR_SCODE" AS "旧系统起码",
     wmr.mr_last_read_time AS "新系统上次查表时间",
-    wms.mr_prdate AS "旧系统上次查表时间",
-    wmr.create_time,
-		wmr.mb_code as "新系统查表路",
-		wms.mr_bfid as "旧系统查表路",
-    case wmr.mr_manual_source
-			when '01' then '正常'
-			when '02' then '自报数'
-			when '03' then '自来水app自报数'
-			when '08' then '预约查表'
-			when '09' then '半年未见数'
-			when '05' then '营销计划管理'
-			when '04' then '追补'
-    end as "新系统计划来源"   
-FROM 
-    water_meter_read wmr
-    full JOIN wmis_meter_read wms ON wms.mr_mid = wmr.meter_code 
-WHERE  
-	(wmr.meter_code is null or wms.mr_mid is null) or
-	wmr.mr_old_last <> wms.mr_scode or wmr.mr_last_read_time <> wms.mr_prdate; 
+    WMS."MR_PRDATE" AS "旧系统上次查表时间",
+    wmr.create_time as "创建时间",
+    wmr.mb_code AS "新系统查表路",
+    WMS."MR_BFID" AS "旧系统查表路",
+    wmr.account_opening_plan as "纳入远传",
+    CASE wmr.mr_manual_source
+        WHEN '01' THEN '正常'
+        WHEN '02' THEN '自报数'
+        WHEN '03' THEN '自来水app自报数'
+        WHEN '08' THEN '预约查表'
+        WHEN '09' THEN '半年未见数'
+        WHEN '05' THEN '营销计划管理'
+        WHEN '04' THEN '追补'
+    END AS "新系统计划来源",
+    wmb.mb_task_month as "查表任务月份",
+    wc.mb_period as "用户查表周期",
+    wc.client_status as "用户状态",
+    wm.meter_state as "水表状态",
+    wc.create_time as "立户时间"
+FROM
+    water_meter_read_back_20251001 wmr
+    FULL JOIN water_revenue.wmis_meter_read_20251001 WMS
+        ON WMS."MR_MID" = wmr.meter_code
+    left join water_meter wm on wmr.meter_code = wm.meter_code
+    left join water_meter_book wmb on wmr.mb_code = wmb.mb_code
+    left join water_client wc on wmr.client_code = wc.client_code
+WHERE
+    (wmr.meter_code IS NULL OR WMS."MR_MID" IS NULL)
+    OR wmr.mr_old_last <> WMS."MR_SCODE"
+    OR DATE(mr_last_read_time) <> DATE(WMS."MR_PRDATE");
+
+
+-- 新系统全部查表计划数量（支）
+select count(*) from water_meter_read_back_20251001;
+-- 新系统户表查表计划数量(支)
+select count(*) from water_meter_read_back_20251001 where client_type = '1';
+-- 新系统户表远传纳入数量(支)
+select count(*) from water_meter_read_back_20251001 where client_type = '1' and account_opening_plan = '1';
+-- 新系统大路表查表计划数量(支)
+select count(*) from water_meter_read_back_20251001 where client_type = '2';
+-- 新系统大路表远传纳入数量(支)
+select count(*) from water_meter_read_back_20251001 where client_type = '2' and account_opening_plan = '1';
+select * from water_meter_book wmb where wmb.mb_type ='1'
+-- 现状系统全部查表计划数量（支）
+select count(*) from wmis_meter_read_20251001;
+-- 现状系统户表查表计划数量(支)
+   select count(*) from wmis_meter_read_20251001 wmr 
+   where "MR_CID" IN (SELECT ciid FROM WMIS_CUSTINFO wc WHERE wc.cibfid in (select mb_code from water_meter_book wmb where wmb.mb_type ='2'
+)) AND "MR_CID" IN (SELECT cid FROM WMIS_YCB_CZ_CID wycc);
+
 ```
 
 ### 查表数据
