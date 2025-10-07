@@ -8,133 +8,20 @@
         "type": "tabs",
         "children": [
           {
-            "id": "62296e5ed34a4b46",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "2025-09-22.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2025-09-22"
-            }
-          },
-          {
-            "id": "6c11ad6f1efe812a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "2025-09-28.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2025-09-28"
-            }
-          },
-          {
-            "id": "260972ab656e1af3",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "远传检查.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "远传检查"
-            }
-          },
-          {
-            "id": "1905b245b755a732",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "work/归档/北水vpn.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "北水vpn"
-            }
-          },
-          {
-            "id": "cdfe57a2f19a3099",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "work/work-log/2025-08-15.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2025-08-15"
-            }
-          },
-          {
-            "id": "a4eda18dcc22c1df",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "work/work-log/2025-08-18.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2025-08-18"
-            }
-          },
-          {
-            "id": "d0347ffead0dfcd2",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "work/work-log/2025-08-19.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2025-08-19"
-            }
-          },
-          {
-            "id": "d9446ddff757379c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "work/work-log/2025-08-20.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2025-08-20"
-            }
-          },
-          {
             "id": "bd26a5eaf84b6937",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "debug/fastmcp-postman-invalid parameter.md",
+                "file": "work/归档/远传出账sql.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "fastmcp-postman-invalid parameter"
+              "title": "远传出账sql"
             }
           }
-        ],
-        "currentTab": 8
+        ]
       }
     ],
     "direction": "vertical"
@@ -255,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2025-09-09.md",
+                "file": "work/归档/远传出账sql.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "2025-09-09 的大纲"
+              "title": "远传出账sql 的大纲"
             }
           },
           {
@@ -289,7 +176,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 521.5
+    "width": 395.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -303,8 +190,10 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "bd26a5eaf84b6937",
+  "active": "d296e470712e0f21",
   "lastOpenFiles": [
+    "debug/fastmcp-postman-invalid parameter.md",
+    "work/归档/远传出账sql.md",
     "partwork/自媒体/未命名.md",
     "partwork/自媒体/内容选择.canvas",
     "partwork/自媒体/平台选择.canvas",
@@ -338,8 +227,6 @@
     "work/work-log/2025-09-02.md",
     "work/work-log/2025-09-10.md",
     "work/work-log/2025-09-12.md",
-    "work/work-log/2025-09-11.md",
-    "work/work-log/2025-09-15.md",
     "partwork/博文",
     "partwork/自媒体",
     "partwork",
