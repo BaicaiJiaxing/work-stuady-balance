@@ -1,0 +1,11 @@
+{
+	"nodes":[
+		{"id":"0c78ce2053487ff1","type":"text","text":"<center>工具分享</center>","x":-375,"y":-40,"width":250,"height":60},
+		{"id":"41aaeaf953468737","type":"text","text":"<center>牛散之路</center>","x":100,"y":-40,"width":250,"height":60},
+		{"id":"8436b29c3be318c8","type":"text","text":"<center>内容创作</center>","x":-125,"y":-180,"width":250,"height":50}
+	],
+	"edges":[
+		{"id":"db7f72ffcd914312","fromNode":"8436b29c3be318c8","fromSide":"bottom","toNode":"0c78ce2053487ff1","toSide":"top"},
+		{"id":"e9d760540b2b9d90","fromNode":"8436b29c3be318c8","fromSide":"bottom","toNode":"41aaeaf953468737","toSide":"top"}
+	]
+}
