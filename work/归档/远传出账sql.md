@@ -168,16 +168,28 @@ SELECT
     wmr.mr_enter_staff as "新系统录入员",
 		wmr.mr_input_time as "新系统录入时间",
 		wms.mr_inputdate as "旧系统录入时间",
-		wmr.read_source
+		 CASE wmr.mr_manual_source
+        WHEN '01' THEN '正常'
+        WHEN '02' THEN '自报数'
+        WHEN '03' THEN '自来水app自报数'
+        WHEN '08' THEN '预约查表'
+        WHEN '09' THEN '半年未见数'
+        WHEN '05' THEN '营销计划管理'
+        WHEN '04' THEN '追补'
+    END AS "新系统计划来源",
+    CASE wmr.account_opening_plan
+        WHEN '1' THEN '是'
+        WHEN '0' THEN '否'
+    end as "是否纳入远传"
 FROM
     water_meter_read wmr
     FULL JOIN wmis_meter_read wms ON wms.mr_mid = wmr.meter_code 
 WHERE 
-    (wmr.mr_enter_staff = '远传' and wmr.mr_input_time >= '2025-04-07') or 
+    (wmr.mr_enter_staff = '远传') or 
 --     wmr.mr_enter_staff = '远传' OR wms.mr_inputer = '远传'
-    (wms.mr_inputer = '远传'  and wms.mr_inputdate >= '2025-04-07' )
+    (wms.mr_inputer = '远传')
 --     and work_day = '1'
--- and client_type = '1'
+and client_type = '1'
     order by wmr.meter_code;
 ```
 
@@ -240,105 +252,274 @@ WHERE wmr.meter_code in ()
 order by wmr.meter_code;
 ```
 ### 应收差异
+
+城区数据量大需要针对当月应收建表
 ```
-WITH base_data AS (
+CREATE TEMP TABLE tmp_clients AS
+SELECT DISTINCT wmr.client_code
+FROM water_meter_read wmr
+JOIN wmis_meter_read wms ON wms.mr_mid = wmr.meter_code
+WHERE wmr.mr_enter_staff = '远传'
+  AND wms.mr_inputer = '远传'
+  AND wmr.mr_use = wms.mr_usenum
+  AND wmr.mr_read_time = wms.mr_readdate
+  AND wmr.mr_old_now = wms.mr_ecode
+  AND wmr.mr_old_now IS NOT NULL
+  AND wmr.account_status = '1'
+  AND wms.mr_flagecrz = 'N'
+  AND wmr.client_type = '1'
+  AND wmr.mr_month = '2025-10';
+
+CREATE INDEX idx_tmp_clients ON tmp_clients(client_code);
+
+create table account_charge_meter_1010 as 
+SELECT a.*
+FROM account_charge_meter a
+JOIN tmp_clients t ON a.client_code = t.client_code
+WHERE a.mr_month = '2025-10';
+
+create table account_charge_client_1010 AS
+select * from account_charge_client where acm_id in (select cm_id from account_charge_meter_1010);   
+
+
+with base_data as (
     SELECT 
          acm.cm_id AS cmid, 
          wra.raid AS raid,
          acm.client_code,
          wra.rausenum AS rause,
          acm.charge_count AS acmcount
-    FROM water_revenue_back.account_charge_meter_20250907 acm 
+    FROM account_charge_meter_1010   acm
     INNER JOIN wmis_rec_acc wra  -- 改为 INNER JOIN，避免不必要的无效数据
         ON (acm.charge_month, acm.client_code) = (wra.ramonth, wra.racid)
-    WHERE acm.mr_month = '2025-09' 
-      AND acm.client_code IN (
-            SELECT client_code 
-            FROM (
-                SELECT
-                    wmr.client_code
-                FROM water_meter_read wmr
-                INNER JOIN wmis_meter_read wms  -- 改为 INNER JOIN
-                       ON wms.mr_mid = wmr.meter_code 
-                WHERE wmr.mr_enter_staff = '远传'
-                  AND wms.mr_inputer = '远传'
-                  AND wmr.mr_month = '2025-09'
-                  AND wmr.mr_use = wms.mr_usenum
-                  AND account_status = '1' 
-                  AND wms.mr_flagecrz = 'N'
-                  AND wmr.mr_read_time = wms.mr_readdate 
-                  AND wmr.client_type = '1'
-                GROUP BY wmr.client_code
-            ) t
-        )
+    WHERE  acm.client_code is not null
 )
-
 , detail AS (
     SELECT 
-        b.client_code,
-        wrac.racpiid,
-        MAX(b.rause) AS max_rause,  -- 保持最大值，检查是否是你业务所需
-        MAX(b.acmcount) AS max_acmcount,  -- 保持最大值，检查是否是你业务所需
-        SUM(DISTINCT wrac.racmoney) AS sum_racmoney,  -- 去重，避免重复计算
-        acc.pi_code,
-        SUM(DISTINCT acc.cc_price) AS sum_cc_price  -- 去重，避免重复计算
+        b.client_code as "用户编号",
+        wrac.racpiid as "老系统费用项",
+        MAX(b.rause) AS "老系统出账水量",  -- 保持最大值，检查是否是你业务所需
+        MAX(b.acmcount) AS "新系统出账水量",  -- 保持最大值，检查是否是你业务所需
+        SUM(DISTINCT wrac.racmoney) AS "老系统出账金额",  -- 去重，避免重复计算
+        acc.pi_code as "新系统费用项",
+        SUM(DISTINCT acc.cc_price) AS "新系统出账金额"  -- 去重，避免重复计算
     FROM wmis_rec_acc_content wrac
-    LEFT JOIN water_revenue_back.account_charge_client_20250907 acc
+    LEFT JOIN account_charge_client_1010  acc
            ON (wrac.racmid, wrac.racpiid) = (acc.meter_code, acc.pi_code)
     JOIN base_data b
            ON wrac.racraid = b.raid
           AND acc.acm_id = b.cmid
     GROUP BY b.client_code, wrac.racpiid, acc.pi_code
 )
+SELECT * from detail;
+-- 
+
 
 SELECT 
-    COUNT(DISTINCT client_code) AS "用户数",  -- 使用 DISTINCT 避免重复计算
-    detail.pi_code,
-    SUM(sum_cc_price) AS "新系统出账金额",
-    SUM(sum_racmoney) AS "旧系统出账金额"
+    COUNT(DISTINCT "用户编号") AS "用户数",
+      -- 使用 DISTINCT 避免重复计算
+      sum("老系统出账水量"),sum("新系统出账水量"),
+    detail."老系统费用项",
+    SUM("新系统出账金额") AS "新系统出账金额",
+    SUM("老系统出账金额") AS "旧系统出账金额"
 FROM detail
-GROUP BY pi_code;
+GROUP BY "老系统费用项";  
+
 
 ```
 
 ### 异常审核明细
 ```
 SELECT
-    wmr.client_code,
-    wc.client_type,
+    CASE wmr.meter_is_main
+        WHEN 'Y' THEN '是'
+        WHEN 'N' THEN '否'
+    END AS "是否父表",
+    CASE wmr.client_type
+        WHEN '1' THEN '户表'
+        WHEN '2' THEN '大路表'
+    END AS "用户类型",
+    CASE wmr.meter_is_billing 
+        WHEN 'Y' THEN '计费'
+        WHEN 'N' THEN '不计费'
+    END AS "计费标识",
+    wmr.client_code AS "新系统用户编号",
+    wms.mr_cid AS "旧系统用户编号",
+    wmr.meter_code AS "新系统水表编号",
+    wms.mr_mid AS "旧系统水表编号",
+    wmr.work_day as "新系统查表工作日",
+     wms.mr_workdate as "旧系统查表工作日",
+    wmr.mr_old_last AS "新系统起码",
+    wms.mr_scode AS "旧系统起码",
+    wmr.mr_old_now AS "新系统止码",
+    wms.mr_ecode AS "旧系统止码",
+    wmr.mr_use AS "新系统水量",
+    wms.mr_usenum AS "旧系统水量",
+    wms.mr_readdate AS "旧系统查表时间",
+    wmr.mr_read_time AS "新系统查表时间",
+    wmr.mr_last_read_time AS "上次查表时间",
+    CASE wmr.mr_state
+        WHEN 'Y' THEN '是'
+        WHEN 'N' THEN '否'
+    END AS "新系统出账标志",
+    CASE wms.mr_flagra
+        WHEN 'Y' THEN '是'
+        WHEN 'N' THEN '否'
+    END AS "旧系统出账标志",
+    CASE wmr.account_status 
+        WHEN '2' THEN '是'
+        WHEN '1' THEN '否'
+    END AS "新系统二次入账标志",
+    wmr.check_status  AS "新系统查表状态",
+    CASE wms.mr_flagecrz
+        WHEN 'Y' THEN '是'
+        WHEN 'N' THEN '否'
+    END AS "旧系统二次入账标志",
+    wms.mr_last_buss AS "旧系统二次入账原因",
+    wms.mr_inputer AS "旧系统录入员",
+    wmr.mr_enter_staff as "新系统录入员",
+		wmr.mr_input_time as "新系统录入时间",
+		wms.mr_inputdate as "旧系统录入时间",
+		 CASE wmr.mr_manual_source
+        WHEN '01' THEN '正常'
+        WHEN '02' THEN '自报数'
+        WHEN '03' THEN '自来水app自报数'
+        WHEN '08' THEN '预约查表'
+        WHEN '09' THEN '半年未见数'
+        WHEN '05' THEN '营销计划管理'
+        WHEN '04' THEN '追补'
+    END AS "新系统计划来源",
+    CASE wmr.account_opening_plan
+        WHEN '1' THEN '是'
+        WHEN '0' THEN '否'
+    end as "是否纳入远传"
+FROM
+    water_meter_read wmr
+    FULL JOIN wmis_meter_read wms ON wms.mr_mid = wmr.meter_code 
+WHERE 
+    (wmr.mr_enter_staff = '远传') or 
+--     wmr.mr_enter_staff = '远传' OR wms.mr_inputer = '远传'
+    (wms.mr_inputer = '远传')
+--     and work_day = '1'
+and client_type = '1'
+    order by wmr.meter_code;
+    
+    
+    SELECT
+    wmr.client_code as "新系统用户编号",
+    wc.client_type as "用户类型",
     wc.is_ladderhouse AS "阶梯标识",
     wc.meter_is_billing AS "计费标识",
-    STRING_AGG(DISTINCT wmr.mr_use::text, ',') AS mr_use,
-    STRING_AGG(DISTINCT wmr.check_status, ',') AS check_status,
-    SUM(CASE WHEN wmr.mr_use < 0 THEN 0 ELSE wmr.mr_use END) AS total_mr_use,
+    STRING_AGG(DISTINCT wmr.mr_use::text, ',') AS "查表水量（多表，分隔）",
+    STRING_AGG(DISTINCT wmr.check_status, ',') AS "当前查表状态",
+    SUM(CASE WHEN wmr.mr_use < 0 THEN 0 ELSE wmr.mr_use END) AS "累计水量（负水量按0相加）",
     wc.year_total_sl AS "出账前年累计",
     wc.year_total_sl + SUM(CASE WHEN wmr.mr_use < 0 THEN 0 ELSE wmr.mr_use END) AS "出账后年累计",
     wc.meter_people_amt AS "人口数",
-    MAX(wmr.mr_last_read_time) AS mr_last_read_time,
-    MAX(wmr.use_water_type) AS use_water_type,
-    MAX(wmra.check_type) AS check_type,
-    MAX(wmr.mr_read_time) AS mr_read_time
+    MAX(wmr.mr_last_read_time) AS "上次查表时间",
+    MAX(wc.wp_code) AS "水价",
+    MAX(wmr.mr_read_time) AS "本次查表时间",
+    CASE
+    WHEN wmra.check_type = 'cqwjs' THEN '长期未见数'
+    WHEN wmra.check_type = 'zeroWater' THEN '水量为0'
+    WHEN wmra.check_type = 'waterIsNegative' THEN '水量为负'
+    WHEN wmra.check_type = 'waterFluctuationAnomaly' THEN '水量波动'
+    WHEN wmra.check_type = 'superLadder' THEN '超阶梯'
+    WHEN wmr.check_status = '15' THEN '提级审核'
+    WHEN wmr.check_status = '5' THEN '一户多表待出账'
+    WHEN wmr.check_status = '51' THEN '待子表出账'
+END AS "新系统审核类型",
+    wms.mr_last_buss AS "旧系统二次入账原因"
 FROM
     water_meter_read wmr
+left join wmis_meter_read wms on wmr.meter_code = wms.mr_mid
 LEFT JOIN
     water_client wc ON wmr.client_code = wc.client_code
 LEFT JOIN
     water_meter_read_abnormal wmra ON wmr.client_code = wmra.client_code AND wmr.mr_month = wmra.mr_month
 WHERE
-    wmr.mr_enter_staff IN ('远传')
-    AND wmr.mr_month = '2025-08'
---    AND wmr.mr_input_time <= '2025-04-02'
---    AND wmr.mr_state = 'N'
---    AND wmr.account_status = '2'
---    AND wc.client_type = '1'
---    AND (wmra.mr_month = '2025-01' OR wmra.mr_month IS NULL)
---    AND wc.year_total_sl + (CASE WHEN wmr.mr_use < 0 THEN 0 ELSE wmr.mr_use END) > 180
+    wmr.client_code in (
+    SELECT
+    wmr.client_code
+FROM
+    water_meter_read wmr
+    FULL JOIN wmis_meter_read wms ON wms.mr_mid = wmr.meter_code 
+WHERE 
+    wmr.mr_enter_staff = '远传' and wms.mr_inputer = '远传'
+    and wmr.mr_read_time = wms.mr_readdate and wmr.mr_use = wms.mr_usenum and wmr.mr_old_now = wms.mr_ecode 
+    and wmr.account_status = '2' and wms.mr_flagecrz = 'Y'
+--     and work_day = '1'
+and client_type = '1'
+    )
 GROUP BY
     wmr.client_code,
     wc.client_type,
     wc.is_ladderhouse,
     wc.meter_is_billing,
     wc.year_total_sl,
-    wc.meter_people_amt;
+    wc.meter_people_amt,
+    wmra.check_type,
+    wms.mr_last_buss,
+    wmr.check_status;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  -- 新系统远传所有审核明细  
+    SELECT
+    wmr.client_code as "新系统用户编号",
+    wc.client_type as "用户类型",
+    wc.is_ladderhouse AS "阶梯标识",
+    wc.meter_is_billing AS "计费标识",
+    STRING_AGG(DISTINCT wmr.mr_use::text, ',') AS "查表水量（多表，分隔）",
+    STRING_AGG(DISTINCT wmr.check_status, ',') AS "当前查表状态",
+    SUM(CASE WHEN wmr.mr_use < 0 THEN 0 ELSE wmr.mr_use END) AS "累计水量（负水量按0相加）",
+    wc.year_total_sl AS "出账前年累计",
+    wc.year_total_sl + SUM(CASE WHEN wmr.mr_use < 0 THEN 0 ELSE wmr.mr_use END) AS "出账后年累计",
+    wc.meter_people_amt AS "人口数",
+    MAX(wmr.mr_last_read_time) AS "上次查表时间",
+    MAX(wc.wp_code) AS "水价",
+    MAX(wmr.mr_read_time) AS "本次查表时间",
+    CASE
+    WHEN wmra.check_type = 'cqwjs' THEN '长期未见数'
+    WHEN wmra.check_type = 'zeroWater' THEN '水量为0'
+    WHEN wmra.check_type = 'waterIsNegative' THEN '水量为负'
+    WHEN wmra.check_type = 'waterFluctuationAnomaly' THEN '水量波动'
+    WHEN wmra.check_type = 'superLadder' THEN '超阶梯'
+    WHEN wmr.check_status = '15' THEN '提级审核'
+    WHEN wmr.check_status = '5' THEN '一户多表待出账'
+    WHEN wmr.check_status = '51' THEN '待子表出账'
+END AS "新系统审核类型",
+    wms.mr_last_buss AS "旧系统二次入账原因"
+FROM
+    water_meter_read wmr
+left join wmis_meter_read wms on wmr.meter_code = wms.mr_mid
+LEFT JOIN
+    water_client wc ON wmr.client_code = wc.client_code
+LEFT JOIN
+    water_meter_read_abnormal wmra ON wmr.client_code = wmra.client_code AND wmr.mr_month = wmra.mr_month
+WHERE
+    wmr.mr_enter_staff = '远传' and account_status ='2' and wmr.client_type ='1'
+GROUP BY
+    wmr.client_code,
+    wc.client_type,
+    wc.is_ladderhouse,
+    wc.meter_is_billing,
+    wc.year_total_sl,
+    wc.meter_people_amt,
+    wmra.check_type,
+    wms.mr_last_buss,
+    wmr.check_status;
+    
+
 
 ```
