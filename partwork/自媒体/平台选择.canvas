@@ -1,0 +1,10 @@
+{
+	"nodes":[
+		{"id":"60f37709d8820bea","x":-180,"y":-240,"width":250,"height":60,"type":"text","text":"<center>可选平台</center>"},
+		{"id":"979a62e3f0d6406c","x":-430,"y":-60,"width":250,"height":60,"type":"text","text":"<center>小红书</center>"},
+		{"id":"3c02a043a2a9bddd","x":70,"y":-60,"width":250,"height":60,"type":"text","text":"待定"}
+	],
+	"edges":[
+		{"id":"18b60e0aeb9c0807","fromNode":"60f37709d8820bea","fromSide":"bottom","toNode":"979a62e3f0d6406c","toSide":"top"}
+	]
+}
