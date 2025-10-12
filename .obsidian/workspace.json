@@ -1,0 +1,230 @@
+{
+  "main": {
+    "id": "7a332df99e2e7803",
+    "type": "split",
+    "children": [
+      {
+        "id": "ba5b19b4ccf108f9",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "63a9e9b4e03aa20b",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "新标签页"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "32969ceb03e32e32",
+    "type": "split",
+    "children": [
+      {
+        "id": "695a84f2219dcd08",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a063d457be39ad3f",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "902dd838c692487d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "7cf23555e4725c33",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "b12691f65fd711cd",
+    "type": "split",
+    "children": [
+      {
+        "id": "8edf3ab933e540b1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "939782b19e30fba2",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "反向链接"
+            }
+          },
+          {
+            "id": "e02f0a29e75aa372",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "欢迎.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "欢迎 的出链列表"
+            }
+          },
+          {
+            "id": "bd9d6e6a879ea1e2",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "9ae3a3bec8f3e4e3",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "欢迎.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "欢迎 的大纲"
+            }
+          },
+          {
+            "id": "ff947daf1aa77f62",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
+          },
+          {
+            "id": "5befd88ec9faa94b",
+            "type": "leaf",
+            "state": {
+              "type": "chinese-calendar-view",
+              "state": {},
+              "icon": "calendar-with-checkmark",
+              "title": "日历"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 519.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:创建新数据库": false,
+      "obsidian-git:Open Git source control": false
+    }
+  },
+  "active": "ff947daf1aa77f62",
+  "lastOpenFiles": [
+    "work/归档/远传出账sql.md",
+    "work/归档/测试环境登录账号.md",
+    "work/归档/北水vpn.md",
+    "work/work-log/2025-10-09.md",
+    "work/work-log/2025-09-28.md",
+    "work/work-log/2025-09-26.md",
+    "work/work-log/2025-09-25.md",
+    "work/work-log/2025-09-24.md",
+    "work/work-log/2025-09-23.md",
+    "work/work-log/2025-09-22.md",
+    "work/work-log/2025-09-16.md",
+    "work/work-log/2025-09-15.md",
+    "work/work-log/2025-09-12.md",
+    "work/work-log/2025-09-11.md",
+    "work/work-log/2025-09-10.md",
+    "work/work-log/2025-09-09.md",
+    "work/work-log/2025-09-08.md",
+    "work/work-log/2025-09-05.md",
+    "work/work-log/2025-09-02.md",
+    "work/work-log/2025-09-01.md",
+    "work/work-log/2025-08-29.md",
+    "work/work-log/2025-08-28.md",
+    "work/work-log/2025-08-27.md",
+    "work/work-log/2025-08-26.md",
+    "work/work-log/2025-08-25.md",
+    "work/work-log/2025-08-22.md",
+    "work/归档",
+    "work/work-log",
+    "work",
+    "study/resources/Pasted image 20250902143743.png",
+    "study/resources",
+    "study",
+    "partwork/自媒体/平台选择.canvas",
+    "partwork/自媒体/内容选择.canvas",
+    "partwork/自媒体",
+    "partwork/博文",
+    "partwork",
+    "debug",
+    "copilot/copilot-custom-prompts"
+  ]
+}
