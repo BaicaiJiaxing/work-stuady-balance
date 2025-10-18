@@ -1,0 +1,223 @@
+{
+  "main": {
+    "id": "6e03c5f65f4589c6",
+    "type": "split",
+    "children": [
+      {
+        "id": "a10ef1528a5b3b32",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "57c0aae32dea1e00",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "study/股神/TEFI.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "TEFI"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f14d47f5ec74d58f",
+    "type": "split",
+    "children": [
+      {
+        "id": "28448c244de51c7b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b1d0418091166f1e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "50aa06cd01a70667",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "92063b88e0479933",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "right": {
+    "id": "d81e4627f15562ad",
+    "type": "split",
+    "children": [
+      {
+        "id": "ee08725ff133c159",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2fccdf9a5f7638ad",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "work/归档/北水vpn.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "北水vpn 的反向链接列表"
+            }
+          },
+          {
+            "id": "804b0549dd77a2d2",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "work/归档/北水vpn.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "北水vpn 的出链列表"
+            }
+          },
+          {
+            "id": "2ceed734d30041ef",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "c7d85ba04b2d1ddc",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "study/股神/TEFI.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "TEFI 的大纲"
+            }
+          },
+          {
+            "id": "849015431c4fde56",
+            "type": "leaf",
+            "state": {
+              "type": "chinese-calendar-view",
+              "state": {},
+              "icon": "calendar-with-checkmark",
+              "title": "日历"
+            }
+          },
+          {
+            "id": "42404b5c2d8af496",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
+          },
+          {
+            "id": "a7994bcc2fb60142",
+            "type": "leaf",
+            "state": {
+              "type": "highlights-sidebar",
+              "state": {},
+              "icon": "highlighter",
+              "title": "Highlights"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 243.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:创建新数据库": false,
+      "obsidian-git:Open Git source control": false,
+      "sidebar-highlights:Open highlights": false
+    }
+  },
+  "active": "57c0aae32dea1e00",
+  "lastOpenFiles": [
+    "Pasted image 20251018202518.png",
+    "Pasted image 20251018202052.png",
+    "Pasted image 20251018202021.png",
+    "Pasted image 20251018201908.png",
+    "Pasted image 20251018201852.png",
+    "Pasted image 20251018201714.png",
+    "Pasted image 20251018201517.png",
+    "Pasted image 20251018200818.png",
+    "Pasted image 20251018200525.png",
+    "Pasted image 20251018200441.png",
+    "Pasted image 20251018200410.png",
+    "study/股神/价格行为学-信号k线&入场.md",
+    "study/股神/TEFI.md",
+    "work/归档/北水vpn.md",
+    "study/股神"
+  ]
+}

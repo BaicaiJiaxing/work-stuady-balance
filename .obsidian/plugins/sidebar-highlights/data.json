@@ -1,0 +1,70 @@
+{
+  "settingsVersion": "1.14.0",
+  "highlightColor": "#ffd700",
+  "sidebarPosition": "right",
+  "highlights": {
+    "study/股神/TEFI.md": [
+      {
+        "id": "t831jb3ep",
+        "text": "***<font color=\"#ff0000\">新手坚持只做顺势交易！！！",
+        "tags": [],
+        "line": 7,
+        "startOffset": 124,
+        "endOffset": 191,
+        "filePath": "study/股神/TEFI.md",
+        "footnoteCount": 0,
+        "footnoteContents": [],
+        "createdAt": 1760788293895,
+        "isNativeComment": false,
+        "color": "#ff0000",
+        "type": "html"
+      },
+      {
+        "id": "dbj70kmsq",
+        "text": "被套在针尖上的解套需求",
+        "tags": [],
+        "line": 18,
+        "startOffset": 329,
+        "endOffset": 344,
+        "filePath": "study/股神/TEFI.md",
+        "footnoteCount": 1,
+        "footnoteContents": [
+          "tmp：前期套牢盘"
+        ],
+        "createdAt": 1760788294090,
+        "isNativeComment": false,
+        "type": "highlight"
+      }
+    ]
+  },
+  "collections": {},
+  "groupingMode": "none",
+  "showFilenames": true,
+  "showTimestamps": true,
+  "showHighlightActions": true,
+  "showToolbar": true,
+  "autoToggleFold": false,
+  "useInlineFootnotes": false,
+  "selectTextOnCommentClick": false,
+  "excludeExcalidraw": true,
+  "excludedFiles": [],
+  "dateFormat": "YYYY-MM-DD HH:mm",
+  "minimumCharacterCount": 0,
+  "highlightFontSize": 11,
+  "detailsFontSize": 11,
+  "commentFontSize": 11,
+  "customColors": {
+    "yellow": "#ffd700",
+    "red": "#ff6b6b",
+    "teal": "#4ecdc4",
+    "blue": "#45b7d1",
+    "green": "#96ceb4"
+  },
+  "customColorNames": {
+    "yellow": "",
+    "red": "",
+    "teal": "",
+    "blue": "",
+    "green": ""
+  }
+}
